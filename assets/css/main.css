@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: 232 238 246;
+  --ink-raised: 255 255 255;
+  --ink-overlay: 221 231 242;
+  --ink-chrome: 214 226 239;
+  --paper: 27 42 65;
+  --paper-muted: 74 95 120;
+  --line: 167 186 207;
+  --gold: 43 85 122;
+  --gold-strong: 33 68 99;
+  --steel: 90 130 168;
+  --economy: 46 110 118;
+  --sports: 62 112 156;
+  --trend: 88 112 176;
+}
+
+@layer base {
+  html {
+    background-color: rgb(var(--ink));
+  }
+
+  html,
+  body,
+  #__nuxt {
+    height: 100%;
+  }
+
+  body {
+    @apply font-sans antialiased;
+    color: rgb(var(--paper)) !important;
+    background-color: rgb(var(--ink));
+    background-image:
+      radial-gradient(1000px 480px at 88% -8%, rgb(43 85 122 / 0.10), transparent 58%),
+      linear-gradient(180deg, rgb(244 247 251) 0%, rgb(232 238 246) 46%);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: rgb(var(--paper)) !important;
+  }
+
+  header,
+  aside {
+    color: rgb(var(--paper));
+    background-color: rgb(var(--ink-chrome)) !important;
+  }
+
+  input,
+  select,
+  textarea {
+    color: rgb(var(--paper)) !important;
+    background-color: rgb(var(--ink-raised)) !important;
+  }
+
+  input::placeholder {
+    color: rgb(var(--paper-muted)) !important;
+  }
+
+  table,
+  .panel {
+    color: rgb(var(--paper));
+    background-color: rgb(var(--ink-raised)) !important;
+  }
+
+  thead {
+    color: rgb(var(--paper)) !important;
+    background-color: rgb(var(--ink-overlay)) !important;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(43 85 122 / 0.35) transparent;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-[0.18em] text-paper-muted;
+  }
+
+  .panel {
+    @apply rounded-2xl border border-line shadow-panel;
+    color: rgb(var(--paper));
+    background-color: rgb(var(--ink-raised)) !important;
+  }
+
+  .nav-link {
+    @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm;
+    color: rgb(var(--paper-muted));
+  }
+
+  .nav-link:hover,
+  .nav-link.router-link-exact-active {
+    color: rgb(var(--paper)) !important;
+    background-color: rgb(var(--ink-raised)) !important;
+  }
+
+  .nav-link.router-link-exact-active {
+    box-shadow: inset 3px 0 0 rgb(var(--gold));
+  }
+
+  .field {
+    @apply h-9 w-full rounded-lg border border-line px-2.5 text-xs outline-none;
+    color: rgb(var(--paper));
+    background-color: rgb(var(--ink-raised));
+  }
+
+  .field:focus {
+    border-color: rgb(var(--gold));
+  }
+
+  .icon-btn {
+    @apply inline-flex h-9 items-center justify-center rounded-lg border border-line px-3 text-xs font-medium;
+    color: rgb(var(--paper));
+    background-color: rgb(var(--ink-raised));
+  }
+
+  .icon-btn:hover {
+    background-color: rgb(var(--ink-overlay));
+  }
+
+  .ghost-btn {
+    @apply inline-flex h-9 items-center justify-center rounded-lg px-3 text-xs font-medium;
+    color: rgb(var(--paper-muted));
+  }
+
+  .ghost-btn:hover {
+    color: rgb(var(--paper));
+    background-color: rgb(var(--ink-overlay));
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl px-5 text-sm font-medium text-white;
+    background-color: rgb(var(--gold));
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.4;
+  }
+}
