@@ -51,9 +51,9 @@
     // Optional alias from NEWS_API_KEY.
     newsApiKey: '',
     // Server-only. Mapped from OPENAI_API_KEY / NUXT_OPENAI_API_KEY.
-    openaiApiKey: '',
-    openaiApiBase: '',
-    openaiModel: 'gpt-4o-mini',
+    openaiApiKey: process.env.OPENAI_API_KEY || '',
+    openaiApiBase: process.env.OPENAI_API_BASE || '',
+    openaiModel: process.env.OPENAI_MODEL || '',
     public: {
       appName: 'News Research'
     }

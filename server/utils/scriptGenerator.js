@@ -287,20 +287,45 @@ function mergeLlmScript({ region, category, stories, parsed, provider }) {
   })
 }
 
-async function requestChatJson({ apiKey, apiBase, model, systemPrompt, userPrompt }) {
-  const base = asString(apiBase) || DEFAULT_BASE
+function isGeminiBase(apiBase) {
+  return asString(apiBase).includes('generativelanguage.googleapis.com')
+}
+
+function modelCandidates(apiBase, model) {
+  const requested = asString(model) || DEFAULT_MODEL
+
+  if (!isGeminiBase(apiBase)) {
+    return [requested]
+  }
+
+  return [...new Set([
+    requested,
+    'gemini-3.8-flash',
+    'gemini-flash-lite-latest',
+    'gemini-3.1-flash-lite',
+    'gemini-3.6-flash'
+  ])]
+}
+
+function scriptModelError(model, status, payload) {
+  const detail = asString(payload?.error?.message)
+  const prefix = `Script model ${model} failed with ${status}.`
+  return detail ? `${prefix} ${detail}` : prefix
+}
+
+async function requestOneChatJson({ url, apiKey, model, systemPrompt, userPrompt }) {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 45000)
 
   try {
-    const response = await fetch(`${base.replace(/\/$/, '')}/chat/completions`, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: asString(model) || DEFAULT_MODEL,
+        model,
         temperature: 0.4,
         response_format: { type: 'json_object' },
         messages: [
@@ -311,18 +336,66 @@ async function requestChatJson({ apiKey, apiBase, model, systemPrompt, userPromp
       signal: controller.signal
     })
 
-    const payload = await response.json().catch(() => ({}))
+    const raw = await response.text()
+    let payload = {}
 
-    if (!response.ok) {
-      const message = payload?.error?.message || `Script model failed with ${response.status}.`
-      throw new Error(message)
+    try {
+      payload = raw ? JSON.parse(raw) : {}
+    } catch {
+      payload = {}
     }
 
-    const text = payload?.choices?.[0]?.message?.content
-    return parseJsonObject(text)
+    if (!response.ok) {
+      const error = new Error(scriptModelError(model, response.status, payload))
+      error.status = response.status
+      throw error
+    }
+
+    return parseJsonObject(payload?.choices?.[0]?.message?.content)
   } finally {
     clearTimeout(timeout)
   }
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+async function requestChatJson({ apiKey, apiBase, model, systemPrompt, userPrompt }) {
+  const base = asString(apiBase) || DEFAULT_BASE
+  const url = `${base.replace(/\/$/, '')}/chat/completions`
+  const candidates = modelCandidates(base, model)
+  let lastError = null
+
+  for (const candidate of candidates) {
+    try {
+      return await requestOneChatJson({
+        url,
+        apiKey,
+        model: candidate,
+        systemPrompt,
+        userPrompt
+      })
+    } catch (error) {
+      lastError = error
+      console.warn('[scriptGenerator]', error.message)
+
+      if (error.name === 'AbortError') {
+        throw error
+      }
+
+      if (error.status === 503) {
+        await sleep(600)
+        continue
+      }
+
+      if (error.status !== 404) {
+        throw error
+      }
+    }
+  }
+
+  throw lastError
 }
 
 export async function generateVideoScript({
@@ -356,6 +429,7 @@ export async function generateVideoScript({
     stories,
     focusStoryId
   })
+  const provider = isGeminiBase(apiBase) ? 'gemini' : 'openai'
 
   try {
     const parsed = await requestChatJson({
@@ -372,7 +446,7 @@ export async function generateVideoScript({
         category,
         stories,
         parsed,
-        provider: 'openai'
+        provider
       })
       const nextBeats = existingScript.beats.map((beat) => {
         const updated = focused.beats.find((item) => item.storyId === beat.storyId)
@@ -383,7 +457,7 @@ export async function generateVideoScript({
         script: withDuration({
           ...existingScript,
           beats: nextBeats,
-          provider: 'openai',
+          provider,
           generatedAt: new Date().toISOString()
         }),
         warning: null
@@ -396,7 +470,7 @@ export async function generateVideoScript({
         category,
         stories,
         parsed,
-        provider: 'openai'
+        provider
       }),
       warning: null
     }
