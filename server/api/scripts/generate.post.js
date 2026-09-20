@@ -23,11 +23,35 @@ function compactIncomingStory(story, index) {
   }
 }
 
+function firstString(...values) {
+  for (const value of values) {
+    const text = asString(value)
+    if (text) {
+      return text
+    }
+  }
+
+  return ''
+}
+
 function resolveOpenAi(config) {
   return {
-    apiKey: config.openaiApiKey || process.env.OPENAI_API_KEY || process.env.NUXT_OPENAI_API_KEY || '',
-    apiBase: config.openaiApiBase || process.env.OPENAI_API_BASE || process.env.NUXT_OPENAI_API_BASE || '',
-    model: config.openaiModel || process.env.OPENAI_MODEL || process.env.NUXT_OPENAI_MODEL || 'gpt-4o-mini'
+    apiKey: firstString(
+      process.env.OPENAI_API_KEY,
+      process.env.NUXT_OPENAI_API_KEY,
+      config.openaiApiKey
+    ),
+    apiBase: firstString(
+      process.env.OPENAI_API_BASE,
+      process.env.NUXT_OPENAI_API_BASE,
+      config.openaiApiBase
+    ),
+    model: firstString(
+      process.env.OPENAI_MODEL,
+      process.env.NUXT_OPENAI_MODEL,
+      config.openaiModel,
+      'gpt-4o-mini'
+    )
   }
 }
 
@@ -56,6 +80,11 @@ export default defineEventHandler(async (event) => {
 
   const config = useRuntimeConfig(event)
   const openai = resolveOpenAi(config)
+  console.info('[api/scripts/generate]', {
+    model: openai.model,
+    apiBase: openai.apiBase || 'https://api.openai.com/v1',
+    hasKey: Boolean(openai.apiKey)
+  })
 
   try {
     const result = await generateVideoScript({
