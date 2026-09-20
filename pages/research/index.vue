@@ -5,6 +5,7 @@ definePageMeta({
 
 const searchStore = useSearchStore()
 const newsStore = useNewsStore()
+const scriptsStore = useScriptsStore()
 const router = useRouter()
 const { currentMode } = useResearchMode()
 const { currentCategory } = useCategories()
@@ -36,6 +37,7 @@ function onSubmit() {
   }
 
   newsStore.submitSelection(searchStore.mode)
+  scriptsStore.clearScripts()
   router.push('/research/lineup')
 }
 </script>
@@ -44,7 +46,7 @@ function onSubmit() {
   <div class="flex flex-col gap-4 pb-20">
     <div class="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <p class="eyebrow">Step 1 of 2</p>
+        <p class="eyebrow">Step 1 of 3</p>
         <h1 class="mt-1 font-display text-3xl tracking-tight text-paper">Select stories</h1>
         <p class="mt-1 max-w-2xl text-sm text-paper-muted">
           Choose Middle East or World, then a subcategory. Check the stories for that video set and submit.

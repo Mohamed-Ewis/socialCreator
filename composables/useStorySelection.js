@@ -23,7 +23,7 @@ export function useStorySelection() {
   })
 
   const exportHint = computed(() => {
-    return 'Export is a placeholder. Lineups are local until the next task.'
+    return 'Next: generate spoken scripts for each video, then export JSON.'
   })
 
   function syncPanelToSearchMode() {

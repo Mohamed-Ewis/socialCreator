@@ -1,7 +1,16 @@
 <script setup>
 const newsStore = useNewsStore()
+const router = useRouter()
 const { modes, currentMode } = useResearchMode()
 const { categories, selectedCount, selectedCountForMode, exportHint } = useStorySelection()
+
+function goToScripts() {
+  if (!selectedCountForMode.value) {
+    return
+  }
+
+  router.push('/research/scripts')
+}
 
 const dragState = ref({
   categoryId: null,
@@ -180,10 +189,10 @@ const panelModeLabel = computed(() => {
       <button
         type="button"
         class="mt-3 h-10 w-full rounded-xl bg-gold text-sm font-medium text-white disabled:opacity-40"
-        disabled
-        title="Export will be implemented later"
+        :disabled="!selectedCountForMode"
+        @click="goToScripts"
       >
-        Export lineups
+        Generate scripts
       </button>
     </div>
   </aside>

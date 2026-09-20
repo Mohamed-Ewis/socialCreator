@@ -5,10 +5,10 @@ const router = useRouter()
 
 const steps = [
   'Choose Middle East or World',
-  'Choose All, Politics & Economy, Sports, or Trends',
-  'Check the important stories in the table',
-  'Submit to the lineup step',
-  'Drag to order each video'
+  'Choose a subcategory and check the stories',
+  'Submit and drag to order each video',
+  'Generate spoken scripts in Egyptian or American English',
+  'Review, edit, and export JSON'
 ]
 
 function openDesk(modeId) {
