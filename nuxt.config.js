@@ -20,6 +20,7 @@
     storesDirs: ['./stores/**']
   },
   app: {
+    baseURL: process.env.NUXT_APP_BASE_URL || '/',
     head: {
       title: 'News Research',
       htmlAttrs: {
