@@ -20,9 +20,14 @@ async function onHeaderSearch() {
   <header class="sticky top-0 z-30 border-b border-line bg-ink-chrome/90 backdrop-blur-md">
     <div class="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 lg:px-5">
       <div class="flex min-w-0 items-center gap-3">
-        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gold font-display text-xs font-semibold text-white">
+        <RouterLink
+          to="/"
+          class="flex h-9 w-9 items-center justify-center rounded-lg bg-gold font-display text-xs font-semibold text-white hover:bg-gold/80 transition-colors"
+          aria-label="Go to homepage"
+        >
           NR
-        </div>
+        </RouterLink>
+ 
         <div class="min-w-0">
           <p class="truncate font-display text-base leading-none tracking-tight text-paper">{{ appName }}</p>
           <p class="mt-1 truncate text-[11px] text-paper-muted">

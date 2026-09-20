@@ -1,10 +1,12 @@
-/**
- * Export selected stories for the AI video-generation workflow.
- * File format and delivery come in a later task.
- */
-export function exportSelectedStories(_stories = []) {
-  return {
-    implemented: false,
-    stories: []
+import { buildExportPayload } from '~/utils/scripts'
+
+export function exportSelectedStories({ region, queues, scripts } = {}) {
+  if (!region || !queues) {
+    return {
+      implemented: false,
+      stories: []
+    }
   }
+
+  return buildExportPayload({ region, queues, scripts })
 }
