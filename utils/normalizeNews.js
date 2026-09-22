@@ -1,4 +1,4 @@
-import { createEmptyImage, createEmptyImportance, createEmptyNewsArticle, createEmptySource, createEmptyVideo, NEWS_TYPES } from '~/data/newsModel'
+import { createEmptyImage, createEmptyImportance, createEmptyMedia, createEmptyNewsArticle, createEmptySource, createEmptyVideo, MEDIA_KINDS, NEWS_TYPES } from '~/data/newsModel'
 import { CATEGORY_IDS, DEFAULT_MODE, REGION_IDS } from '~/utils/constants'
 
 const SOURCE_DOMAINS = {
@@ -264,6 +264,34 @@ function normalizeImage(raw, title) {
   }
 }
 
+function normalizeMedia(raw, imageUrl) {
+  const source = raw?.media
+
+  if (typeof source === 'string' && source.trim()) {
+    const url = source.trim()
+    const kind = /\.(mp4|webm|mov)(\?|$)/i.test(url) ? MEDIA_KINDS.video : MEDIA_KINDS.image
+    return { kind, url }
+  }
+
+  if (source && typeof source === 'object') {
+    const kindValue = normalizeKey(source.kind || source.type)
+    const kind = kindValue === 'video' || kindValue === 'short' ? MEDIA_KINDS.video : MEDIA_KINDS.image
+    return {
+      kind,
+      url: asString(firstValue(source, ['url', 'link', 'src', 'href']))
+    }
+  }
+
+  if (imageUrl) {
+    return {
+      kind: MEDIA_KINDS.image,
+      url: imageUrl
+    }
+  }
+
+  return createEmptyMedia()
+}
+
 function uniquenessKey(input) {
   return [
     asString(input.source?.domain || input.source?.name),
@@ -331,9 +359,18 @@ export function normalizeNewsArticle(raw = {}, context = {}) {
   }
 
   const imageInput = raw.image !== undefined ? raw.image : firstValue(raw, ['imageUrl', 'image_url', 'thumbnail', 'urlToImage'])
-  const image = typeof imageInput === 'string' || imageInput
+  let image = typeof imageInput === 'string' || imageInput
     ? normalizeImage(imageInput, title)
     : { ...createEmptyImage(), alt: title }
+  const media = normalizeMedia(raw, image.url)
+
+  if (media.kind === MEDIA_KINDS.image && media.url) {
+    image = {
+      ...image,
+      url: media.url,
+      alt: image.alt || title
+    }
+  }
 
   const article = createEmptyNewsArticle({
     id: createNewsId({
@@ -353,6 +390,7 @@ export function normalizeNewsArticle(raw = {}, context = {}) {
     publishedAt,
     url,
     image,
+    media,
     source,
     sources,
     originalArticles,

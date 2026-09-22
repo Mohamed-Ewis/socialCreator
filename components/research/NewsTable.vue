@@ -2,6 +2,8 @@
 import { getCategoryById } from '~/data/categories'
 import { formatShortDate } from '~/utils/formatDate'
 
+const emit = defineEmits(['edit'])
+
 const newsStore = useNewsStore()
 const articles = computed(() => newsStore.articles)
 
@@ -13,12 +15,12 @@ function toggleAll(event) {
   newsStore.setCheckedAll(articles.value, event.target.checked)
 }
 
-function sourceName(article) {
-  return article.source?.name || 'Unknown'
-}
-
 function countriesLabel(article) {
   return (article.countries || []).join(', ') || '—'
+}
+
+function openEditor(article) {
+  emit('edit', article)
 }
 </script>
 
@@ -62,27 +64,63 @@ function countriesLabel(article) {
                 @change="newsStore.toggleChecked(article)"
               >
             </td>
-            <td class="px-2 py-3 align-top font-display text-base text-gold">
-              {{ article.importance?.score || 0 }}
+            <td class="px-2 py-3 align-top">
+              <button
+                type="button"
+                class="story-field font-display text-base text-gold"
+                @click="openEditor(article)"
+              >
+                {{ article.importance?.score || 0 }}
+              </button>
             </td>
             <td class="min-w-[280px] px-2 py-3 align-top">
-              <p class="font-medium leading-snug text-paper">{{ article.title }}</p>
-              <p class="mt-1 line-clamp-2 text-xs leading-relaxed text-paper-muted">{{ article.brief }}</p>
-            </td>
-            <td class="whitespace-nowrap px-2 py-3 align-top text-xs text-paper-muted">
-              {{ sourceName(article) }}
-            </td>
-            <td class="px-2 py-3 align-top text-xs text-paper-muted">
-              {{ countriesLabel(article) }}
-            </td>
-            <td class="whitespace-nowrap px-2 py-3 align-top text-xs text-paper-muted">
-              {{ article.publishedAt ? formatShortDate(article.publishedAt) : '—' }}
+              <button
+                type="button"
+                class="story-field block w-full"
+                @click="openEditor(article)"
+              >
+                <span class="block font-medium leading-snug text-paper">{{ article.title }}</span>
+                <span class="mt-1 line-clamp-2 block text-xs leading-relaxed text-paper-muted">{{ article.brief }}</span>
+              </button>
             </td>
             <td class="px-2 py-3 align-top">
-              <StatusPill
-                :label="getCategoryById(article.category).shortLabel"
-                :tone-class="getCategoryById(article.category).accentClass"
-              />
+              <button
+                type="button"
+                class="story-field whitespace-nowrap text-xs text-paper-muted"
+                @click="openEditor(article)"
+              >
+                {{ article.source?.name || 'Unknown' }}
+              </button>
+            </td>
+            <td class="px-2 py-3 align-top">
+              <button
+                type="button"
+                class="story-field text-xs text-paper-muted"
+                @click="openEditor(article)"
+              >
+                {{ countriesLabel(article) }}
+              </button>
+            </td>
+            <td class="px-2 py-3 align-top">
+              <button
+                type="button"
+                class="story-field whitespace-nowrap text-xs text-paper-muted"
+                @click="openEditor(article)"
+              >
+                {{ article.publishedAt ? formatShortDate(article.publishedAt) : '—' }}
+              </button>
+            </td>
+            <td class="px-2 py-3 align-top">
+              <button
+                type="button"
+                class="story-field"
+                @click="openEditor(article)"
+              >
+                <StatusPill
+                  :label="getCategoryById(article.category).shortLabel"
+                  :tone-class="getCategoryById(article.category).accentClass"
+                />
+              </button>
             </td>
           </tr>
         </tbody>

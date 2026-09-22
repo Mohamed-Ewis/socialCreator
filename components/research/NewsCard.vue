@@ -9,14 +9,18 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['edit'])
+
 const newsStore = useNewsStore()
 const categoryMeta = computed(() => getCategoryById(props.article.category))
 const checked = computed(() => newsStore.isChecked(props.article.id))
-const countriesLabel = computed(() => (props.article.countries || []).join(', ') || '—')
-const sourceName = computed(() => props.article.source?.name || 'Unknown source')
 
 function onToggle() {
   newsStore.toggleChecked(props.article)
+}
+
+function openEditor() {
+  emit('edit', props.article)
 }
 </script>
 
@@ -34,28 +38,29 @@ function onToggle() {
           :aria-label="`Select ${article.title}`"
           @change="onToggle"
         >
-        <span class="font-display text-sm leading-none text-gold">{{ article.importance?.score || 0 }}</span>
+        <button
+          type="button"
+          class="story-field font-display text-sm leading-none text-gold"
+          @click="openEditor"
+        >
+          {{ article.importance?.score || 0 }}
+        </button>
       </label>
 
-      <div class="min-w-0 flex-1">
-        <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-paper-muted">
-          <span>{{ sourceName }}</span>
+      <button type="button" class="story-field min-w-0 flex-1" @click="openEditor">
+        <span class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-paper-muted">
+          <span>{{ article.source?.name || 'Unknown source' }}</span>
           <span>·</span>
-          <span>{{ countriesLabel }}</span>
+          <span>{{ (article.countries || []).join(', ') || '—' }}</span>
           <span>·</span>
           <span>{{ article.publishedAt ? formatShortDate(article.publishedAt) : '—' }}</span>
           <span>·</span>
           <span class="uppercase">{{ article.language || '—' }}</span>
           <StatusPill :label="categoryMeta.label" :tone-class="categoryMeta.accentClass" />
-        </div>
-
-        <h3 class="mt-1 text-sm font-medium leading-snug text-paper">
-          {{ article.title }}
-        </h3>
-        <p class="mt-1 line-clamp-2 text-xs leading-relaxed text-paper-muted">
-          {{ article.brief }}
-        </p>
-      </div>
+        </span>
+        <span class="mt-1 block text-sm font-medium leading-snug text-paper">{{ article.title }}</span>
+        <span class="mt-1 line-clamp-2 block text-xs leading-relaxed text-paper-muted">{{ article.brief }}</span>
+      </button>
     </div>
   </article>
 </template>

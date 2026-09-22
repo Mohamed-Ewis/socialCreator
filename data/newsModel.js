@@ -5,11 +5,23 @@ export const NEWS_TYPES = {
 
 export const REGION_IDS = ['middle-east', 'world']
 
+export const MEDIA_KINDS = {
+  image: 'image',
+  video: 'video'
+}
+
 export function createEmptyImage() {
   return {
     url: '',
     source: '',
     alt: ''
+  }
+}
+
+export function createEmptyMedia() {
+  return {
+    kind: MEDIA_KINDS.image,
+    url: ''
   }
 }
 
@@ -51,6 +63,8 @@ export function createEmptyNewsArticle(overrides = {}) {
     publishedAt: null,
     url: '',
     image: createEmptyImage(),
+    // Still or short-video link. Later this becomes the generated video; title and brief stay the spoken script.
+    media: createEmptyMedia(),
     source: createEmptySource(),
     sources: [],
     originalArticles: [],

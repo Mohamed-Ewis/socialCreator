@@ -36,6 +36,10 @@ export const RAW_PROVIDER_SAMPLES = {
       geo: 'global',
       publisher: { title: 'The Guardian', url: 'https://www.theguardian.com' },
       image_url: 'https://picsum.photos/seed/ai/640/360',
+      media: {
+        kind: 'video',
+        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4'
+      },
       importanceScore: 74
     }
   ]
