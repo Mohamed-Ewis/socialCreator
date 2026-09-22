@@ -1,8 +1,71 @@
+import { MOCK_NEWS } from '~/data/mockNews'
+import { createEmptyMedia } from '~/data/newsModel'
 import { createEmptyQueues } from '~/data/models'
-import { CATEGORY_IDS } from '~/utils/constants'
+import { CATEGORY_IDS, REGION_IDS } from '~/utils/constants'
 
 function cloneArticle(article) {
   return JSON.parse(JSON.stringify(article))
+}
+
+function applyContentPatch(article, patch) {
+  const next = {
+    ...article,
+    source: { ...(article.source || {}) },
+    importance: { ...(article.importance || {}) },
+    image: { ...(article.image || {}) },
+    media: { ...(article.media || createEmptyMedia()) },
+    countries: [...(article.countries || [])],
+    video: { ...(article.video || {}) }
+  }
+
+  if (patch.title !== undefined) {
+    next.title = patch.title
+    next.image = { ...next.image, alt: patch.title || next.image.alt }
+  }
+
+  if (patch.brief !== undefined) {
+    next.brief = patch.brief
+  }
+
+  if (patch.sourceName !== undefined) {
+    next.source = { ...next.source, name: patch.sourceName }
+  }
+
+  if (patch.countries !== undefined) {
+    next.countries = patch.countries
+  }
+
+  if (patch.publishedAt !== undefined) {
+    next.publishedAt = patch.publishedAt
+  }
+
+  if (patch.category !== undefined) {
+    next.category = patch.category
+  }
+
+  if (patch.score !== undefined) {
+    next.importance = {
+      ...next.importance,
+      score: patch.score,
+      relevance: patch.score
+    }
+  }
+
+  if (patch.media !== undefined) {
+    const kind = patch.media.kind === 'video' ? 'video' : 'image'
+    const url = patch.media.url || ''
+    next.media = { kind, url }
+
+    if (kind === 'image') {
+      next.image = {
+        ...next.image,
+        url,
+        alt: next.title || next.image.alt
+      }
+    }
+  }
+
+  return next
 }
 
 function applySelectionState(article, checkedIds) {
@@ -68,6 +131,38 @@ export const useNewsStore = defineStore('news', () => {
 
   function isChecked(id) {
     return checkedIds.value.includes(id)
+  }
+
+  function updateArticle(id, patch) {
+    const source = MOCK_NEWS.find((item) => item.id === id)
+
+    if (source) {
+      Object.assign(source, applyContentPatch(source, patch))
+    }
+
+    const patchItem = (item) => (item.id === id ? applyContentPatch(item, patch) : item)
+
+    articles.value = articles.value.map(patchItem)
+    submitted.value = submitted.value.map(patchItem)
+
+    const nextQueues = createEmptyQueues()
+
+    REGION_IDS.forEach((region) => {
+      CATEGORY_IDS.forEach((categoryId) => {
+        queues.value[region][categoryId].forEach((item) => {
+          if (item.id !== id) {
+            nextQueues[region][categoryId].push(item)
+            return
+          }
+
+          const updated = applyContentPatch(item, patch)
+          const target = CATEGORY_IDS.includes(updated.category) ? updated.category : categoryId
+          nextQueues[region][target].push(updated)
+        })
+      })
+    })
+
+    queues.value = nextQueues
   }
 
   function setArticles(nextArticles = []) {
@@ -238,6 +333,7 @@ export const useNewsStore = defineStore('news', () => {
     findQueueCategory,
     isInQueue,
     isChecked,
+    updateArticle,
     setArticles,
     setPanelMode,
     toggleChecked,

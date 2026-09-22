@@ -144,6 +144,18 @@ const panelModeLabel = computed(() => {
             @dragend="resetDrag"
           >
             <span class="w-4 shrink-0 text-[11px] text-paper-muted">{{ String(index + 1).padStart(2, '0') }}</span>
+            <img
+              v-if="item.media?.url && item.media.kind !== 'video'"
+              :src="item.media.url"
+              alt=""
+              class="h-8 w-12 shrink-0 rounded object-cover"
+            >
+            <span
+              v-else-if="item.media?.url"
+              class="flex h-8 w-12 shrink-0 items-center justify-center rounded bg-ink text-[9px] uppercase tracking-wide text-gold"
+            >
+              Short
+            </span>
             <div class="min-w-0 flex-1">
               <p class="line-clamp-2 text-xs leading-snug text-paper">{{ item.title }}</p>
               <p class="mt-1 text-[10px] text-paper-muted">

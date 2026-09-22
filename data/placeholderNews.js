@@ -4,7 +4,7 @@ function hoursAgo(hours) {
   return new Date(BASE_TIME - hours * 60 * 60 * 1000).toISOString()
 }
 
-export const PLACEHOLDER_NEWS = [
+const STORIES = [
   {
     id: 'me-eco-1',
     title: 'Egypt raises key interest rate as pound pressure returns',
@@ -538,3 +538,50 @@ export const PLACEHOLDER_NEWS = [
     importanceScore: 69
   }
 ]
+
+// Still or short-video links. Later this media becomes the video; title and excerpt become the spoken script.
+const MEDIA_BY_ID = {
+  'me-eco-1': { kind: 'image', url: 'https://picsum.photos/seed/me-eco-1/960/540' },
+  'me-eco-2': { kind: 'image', url: 'https://picsum.photos/seed/me-eco-2/960/540' },
+  'me-eco-3': { kind: 'video', url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
+  'me-eco-4': { kind: 'image', url: 'https://picsum.photos/seed/me-eco-4/960/540' },
+  'me-eco-5': { kind: 'image', url: 'https://picsum.photos/seed/me-eco-5/960/540' },
+  'me-eco-6': { kind: 'video', url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' },
+  'me-eco-7': { kind: 'image', url: 'https://picsum.photos/seed/me-eco-7/960/540' },
+  'me-eco-8': { kind: 'image', url: 'https://picsum.photos/seed/me-eco-8/960/540' },
+  'me-spt-1': { kind: 'video', url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4' },
+  'me-spt-2': { kind: 'image', url: 'https://picsum.photos/seed/me-spt-2/960/540' },
+  'me-spt-3': { kind: 'image', url: 'https://picsum.photos/seed/me-spt-3/960/540' },
+  'me-spt-4': { kind: 'video', url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4' },
+  'me-spt-5': { kind: 'image', url: 'https://picsum.photos/seed/me-spt-5/960/540' },
+  'me-spt-6': { kind: 'image', url: 'https://picsum.photos/seed/me-spt-6/960/540' },
+  'me-trd-1': { kind: 'video', url: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' },
+  'me-trd-2': { kind: 'image', url: 'https://picsum.photos/seed/me-trd-2/960/540' },
+  'me-trd-3': { kind: 'image', url: 'https://picsum.photos/seed/me-trd-3/960/540' },
+  'me-trd-4': { kind: 'video', url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4' },
+  'me-trd-5': { kind: 'image', url: 'https://picsum.photos/seed/me-trd-5/960/540' },
+  'me-trd-6': { kind: 'image', url: 'https://picsum.photos/seed/me-trd-6/960/540' },
+  'wd-eco-1': { kind: 'video', url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' },
+  'wd-eco-2': { kind: 'image', url: 'https://picsum.photos/seed/wd-eco-2/960/540' },
+  'wd-eco-3': { kind: 'image', url: 'https://picsum.photos/seed/wd-eco-3/960/540' },
+  'wd-eco-4': { kind: 'video', url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4' },
+  'wd-eco-5': { kind: 'image', url: 'https://picsum.photos/seed/wd-eco-5/960/540' },
+  'wd-eco-6': { kind: 'image', url: 'https://picsum.photos/seed/wd-eco-6/960/540' },
+  'wd-spt-1': { kind: 'image', url: 'https://picsum.photos/seed/wd-spt-1/960/540' },
+  'wd-spt-2': { kind: 'video', url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
+  'wd-spt-3': { kind: 'image', url: 'https://picsum.photos/seed/wd-spt-3/960/540' },
+  'wd-spt-4': { kind: 'image', url: 'https://picsum.photos/seed/wd-spt-4/960/540' },
+  'wd-spt-5': { kind: 'video', url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' },
+  'wd-spt-6': { kind: 'image', url: 'https://picsum.photos/seed/wd-spt-6/960/540' },
+  'wd-trd-1': { kind: 'image', url: 'https://picsum.photos/seed/wd-trd-1/960/540' },
+  'wd-trd-2': { kind: 'image', url: 'https://picsum.photos/seed/wd-trd-2/960/540' },
+  'wd-trd-3': { kind: 'video', url: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' },
+  'wd-trd-4': { kind: 'image', url: 'https://picsum.photos/seed/wd-trd-4/960/540' },
+  'wd-trd-5': { kind: 'image', url: 'https://picsum.photos/seed/wd-trd-5/960/540' },
+  'wd-trd-6': { kind: 'video', url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4' }
+}
+
+export const PLACEHOLDER_NEWS = STORIES.map((story) => ({
+  ...story,
+  media: MEDIA_BY_ID[story.id] || { kind: 'image', url: '' }
+}))

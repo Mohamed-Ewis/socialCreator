@@ -143,4 +143,16 @@
   .btn-primary:disabled {
     opacity: 0.4;
   }
+
+  .story-field {
+    @apply cursor-pointer rounded px-1 py-0.5 text-left;
+    border: 1px solid transparent;
+    background: transparent;
+  }
+
+  .story-field:hover,
+  .story-field:focus-visible {
+    border-color: rgb(var(--line));
+    background-color: rgb(var(--ink-overlay));
+  }
 }
