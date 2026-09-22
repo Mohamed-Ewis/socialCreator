@@ -54,6 +54,8 @@
     openaiApiKey: process.env.OPENAI_API_KEY || '',
     openaiApiBase: process.env.OPENAI_API_BASE || '',
     openaiModel: process.env.OPENAI_MODEL || '',
+    // Server-only. Mapped from CREATOMATE_API_KEY / NUXT_CREATOMATE_API_KEY.
+    creatomateApiKey: process.env.CREATOMATE_API_KEY || '',
     public: {
       appName: 'News Research'
     }

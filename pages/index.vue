@@ -8,7 +8,8 @@ const steps = [
   'Choose a subcategory and check the stories',
   'Submit and drag to order each video',
   'Generate spoken scripts in Egyptian or American English',
-  'Review, edit, and export JSON'
+  'Review and edit the host copy',
+  'Render each category video with Creatomate'
 ]
 
 function openDesk(modeId) {
@@ -56,7 +57,7 @@ function openDesk(modeId) {
 
     <section class="panel mt-8 p-6">
       <p class="eyebrow">Pipeline</p>
-      <ol class="mt-4 grid gap-3 md:grid-cols-5">
+      <ol class="mt-4 grid gap-3 md:grid-cols-3 lg:grid-cols-6">
         <li
           v-for="(step, index) in steps"
           :key="step"

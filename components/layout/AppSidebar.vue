@@ -47,6 +47,13 @@ const route = useRoute()
         >
           <span class="text-sm">3. Scripts</span>
         </NuxtLink>
+        <NuxtLink
+          to="/research/video"
+          class="nav-link"
+          :class="!newsStore.submittedCount ? 'pointer-events-none opacity-40' : ''"
+        >
+          <span class="text-sm">4. Video</span>
+        </NuxtLink>
       </nav>
     </div>
 
@@ -75,7 +82,7 @@ const route = useRoute()
     </div>
 
     <p class="mt-auto px-2 pt-8 text-[11px] leading-relaxed text-paper-muted">
-      Filter, check, order the lineup, then generate spoken scripts.
+      Filter, check, order the lineup, write scripts, then render video.
     </p>
   </aside>
 </template>
