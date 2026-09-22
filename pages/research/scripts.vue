@@ -40,6 +40,7 @@ const canExport = computed(() => scriptCount.value > 0 && !isGenerating.value)
 
 const exportError = ref('')
 const exportBusy = ref(false)
+const openingVideo = ref(false)
 const started = ref(false)
 
 function focusFirstQueuedCategory() {
@@ -89,6 +90,20 @@ function goBack() {
   router.push('/research/lineup')
 }
 
+async function goToVideo() {
+  if (openingVideo.value) {
+    return
+  }
+
+  openingVideo.value = true
+
+  try {
+    await navigateTo('/research/video?start=1')
+  } finally {
+    openingVideo.value = false
+  }
+}
+
 onMounted(async () => {
   if (started.value) {
     return
@@ -109,10 +124,10 @@ onMounted(async () => {
   <div class="flex flex-col gap-4">
     <div class="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <p class="eyebrow">Step 3 of 3</p>
+        <p class="eyebrow">Step 3 of 4</p>
         <h1 class="mt-1 font-display text-3xl tracking-tight">Review spoken scripts</h1>
         <p class="mt-1 max-w-2xl text-sm text-paper-muted">
-          {{ regionMeta.label }} · {{ voice.label }}. Edit the host copy, then export JSON for video later.
+          {{ regionMeta.label }} · {{ voice.label }}. Edit the host copy, then create the video.
         </p>
       </div>
       <button type="button" class="icon-btn" @click="goBack">
@@ -150,7 +165,7 @@ onMounted(async () => {
 
     <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line bg-ink-raised px-4 py-3">
       <p class="text-sm text-paper-muted">
-        Export saves the ordered stories and the edited spoken scripts. No video is generated yet.
+        When the spoken copy looks right, send each category to Creatomate for the finished MP4.
       </p>
       <div class="flex items-center gap-2">
         <button
@@ -163,11 +178,19 @@ onMounted(async () => {
         </button>
         <button
           type="button"
-          class="h-10 rounded-xl bg-gold px-5 text-sm font-medium text-white disabled:opacity-40"
+          class="icon-btn"
           :disabled="!canExport || exportBusy"
           @click="exportJson"
         >
           {{ exportBusy ? 'Exporting…' : 'Export JSON' }}
+        </button>
+        <button
+          type="button"
+          class="h-10 rounded-xl bg-gold px-5 text-sm font-medium text-white disabled:opacity-40"
+          :disabled="openingVideo"
+          @click="goToVideo"
+        >
+          {{ openingVideo ? 'Opening…' : 'Create video' }}
         </button>
       </div>
     </div>

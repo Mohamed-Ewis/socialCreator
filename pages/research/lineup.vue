@@ -29,7 +29,7 @@ function goBack() {
   <div v-if="hasLineup" class="flex flex-col gap-4">
     <div class="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <p class="eyebrow">Step 2 of 3</p>
+        <p class="eyebrow">Step 2 of 4</p>
         <h1 class="mt-1 font-display text-3xl tracking-tight">Order the videos</h1>
         <p class="mt-1 max-w-2xl text-sm text-paper-muted">
           {{ regionMeta.label }} · {{ regionMeta.videoLanguage }}. Drag stories inside each subcategory to set the video order.
