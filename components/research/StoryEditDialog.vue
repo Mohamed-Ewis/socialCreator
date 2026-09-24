@@ -85,7 +85,7 @@ onBeforeUnmount(() => {
     <div class="fixed inset-0 z-50 flex items-end justify-center p-3 sm:items-center sm:p-6">
       <button
         type="button"
-        class="absolute inset-0 bg-paper/40"
+        class="absolute inset-0 bg-black/70"
         aria-label="Close editor"
         @click="close"
       />
@@ -189,7 +189,7 @@ onBeforeUnmount(() => {
                 <button
                   type="button"
                   class="rounded-md px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em]"
-                  :class="draft.mediaKind === 'image' ? 'bg-gold text-white' : 'border border-line text-paper-muted'"
+                  :class="draft.mediaKind === 'image' ? 'bg-gold text-ink' : 'border border-line text-paper-muted'"
                   @click="setKind('image')"
                 >
                   Image
@@ -197,7 +197,7 @@ onBeforeUnmount(() => {
                 <button
                   type="button"
                   class="rounded-md px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em]"
-                  :class="draft.mediaKind === 'video' ? 'bg-gold text-white' : 'border border-line text-paper-muted'"
+                  :class="draft.mediaKind === 'video' ? 'bg-gold text-ink' : 'border border-line text-paper-muted'"
                   @click="setKind('video')"
                 >
                   Short

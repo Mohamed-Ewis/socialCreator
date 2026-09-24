@@ -3,23 +3,24 @@
 @tailwind utilities;
 
 :root {
-  --ink: 249 250 252;
-  --ink-raised: 255 255 255;
-  --ink-overlay: 239 246 255;
-  --ink-chrome: 255 255 255;
-  --paper: 26 52 105;
-  --paper-muted: 126 138 152;
-  --line: 226 232 240;
-  --gold: 30 64 174;
-  --gold-strong: 22 52 150;
-  --steel: 77 102 182;
-  --economy: 44 76 179;
-  --sports: 30 64 174;
-  --trend: 77 102 182;
+  --ink: 10 16 28;
+  --ink-raised: 22 30 46;
+  --ink-overlay: 34 46 68;
+  --ink-chrome: 13 19 32;
+  --paper: 236 241 248;
+  --paper-muted: 168 180 198;
+  --line: 48 62 84;
+  --gold: 232 184 74;
+  --gold-strong: 214 162 42;
+  --steel: 156 184 220;
+  --economy: 126 212 170;
+  --sports: 156 184 220;
+  --trend: 198 170 232;
 }
 
 @layer base {
   html {
+    color-scheme: dark;
     background-color: rgb(var(--ink));
   }
 
@@ -34,8 +35,8 @@
     color: rgb(var(--paper)) !important;
     background-color: rgb(var(--ink));
     background-image:
-      radial-gradient(1000px 480px at 88% -8%, rgb(30 64 174 / 0.06), transparent 58%),
-      linear-gradient(180deg, rgb(249 250 252) 0%, rgb(244 247 251) 46%);
+      radial-gradient(900px 420px at 88% -10%, rgb(232 184 74 / 0.08), transparent 55%),
+      linear-gradient(180deg, rgb(10 16 28) 0%, rgb(8 12 22) 100%);
   }
 
   h1,
@@ -75,7 +76,7 @@
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgb(30 64 174 / 0.35) transparent;
+    scrollbar-color: rgb(232 184 74 / 0.35) transparent;
   }
 }
 
@@ -136,7 +137,8 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-xl px-5 text-sm font-medium text-white;
+    @apply inline-flex items-center justify-center rounded-xl px-5 text-sm font-medium;
+    color: rgb(var(--ink));
     background-color: rgb(var(--gold));
   }
 

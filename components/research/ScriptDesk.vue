@@ -58,7 +58,7 @@ async function regenerateBeat(storyId) {
         type="button"
         class="rounded-md border px-3 py-1.5 text-xs font-medium"
         :class="category.id === activeCategory
-          ? 'border-gold bg-gold text-white'
+          ? 'border-gold bg-gold text-ink'
           : 'border-line bg-ink-raised text-paper hover:border-gold/40'"
         @click="activeCategory = category.id"
       >

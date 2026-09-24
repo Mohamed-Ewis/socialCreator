@@ -12,7 +12,7 @@ const { filterCategories, currentCategory, setCategory } = useCategories()
         type="button"
         class="rounded-md border px-3 py-1.5 text-xs font-medium"
         :class="category.id === currentCategory.id
-          ? 'border-gold bg-gold text-white'
+          ? 'border-gold bg-gold text-ink'
           : 'border-line bg-ink-raised text-paper hover:border-gold/40'"
         @click="setCategory(category.id)"
       >
