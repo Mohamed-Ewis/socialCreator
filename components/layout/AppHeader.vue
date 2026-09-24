@@ -22,7 +22,7 @@ async function onHeaderSearch() {
       <div class="flex min-w-0 items-center gap-3">
         <RouterLink
           to="/"
-          class="flex h-9 w-9 items-center justify-center rounded-lg bg-gold font-display text-xs font-semibold text-white hover:bg-gold/80 transition-colors"
+          class="flex h-9 w-9 items-center justify-center rounded-lg bg-gold font-display text-xs font-semibold text-ink hover:bg-gold/80 transition-colors"
           aria-label="Go to homepage"
         >
           NR

@@ -200,7 +200,7 @@ const panelModeLabel = computed(() => {
       <p class="text-[11px] leading-relaxed text-paper-muted">{{ exportHint }}</p>
       <button
         type="button"
-        class="mt-3 h-10 w-full rounded-xl bg-gold text-sm font-medium text-white disabled:opacity-40"
+        class="mt-3 h-10 w-full rounded-xl bg-gold text-sm font-medium text-ink disabled:opacity-40"
         :disabled="!selectedCountForMode"
         @click="goToScripts"
       >

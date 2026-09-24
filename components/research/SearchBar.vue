@@ -43,7 +43,7 @@ function onClear() {
     <div class="flex shrink-0 gap-2">
       <button
         type="submit"
-        class="h-12 min-w-[104px] rounded-xl bg-gold px-5 text-sm font-medium text-white disabled:opacity-60"
+        class="h-12 min-w-[104px] rounded-xl bg-gold px-5 text-sm font-medium text-ink disabled:opacity-60"
         :disabled="loading"
       >
         {{ loading ? 'Searching' : 'Search' }}

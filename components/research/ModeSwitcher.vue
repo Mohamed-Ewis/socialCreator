@@ -24,7 +24,7 @@ const { modes, currentMode, setMode } = useResearchMode()
       class="rounded-md font-medium"
       :class="[
         size === 'compact' ? 'px-3 py-1 text-xs' : 'px-4 py-1.5 text-sm',
-        mode.id === currentMode.id ? 'bg-gold text-white' : 'text-paper hover:bg-ink-overlay'
+        mode.id === currentMode.id ? 'bg-gold text-ink' : 'text-paper hover:bg-ink-overlay'
       ]"
       @click="setMode(mode.id)"
     >

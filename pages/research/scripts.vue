@@ -186,7 +186,7 @@ onMounted(async () => {
         </button>
         <button
           type="button"
-          class="h-10 rounded-xl bg-gold px-5 text-sm font-medium text-white disabled:opacity-40"
+          class="h-10 rounded-xl bg-gold px-5 text-sm font-medium text-ink disabled:opacity-40"
           :disabled="openingVideo"
           @click="goToVideo"
         >

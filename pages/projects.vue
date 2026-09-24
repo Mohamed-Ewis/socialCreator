@@ -28,7 +28,7 @@ function onCreateProject() {
         placeholder="Briefing name"
         class="h-12 flex-1 rounded-2xl border border-line bg-ink-raised px-4 text-sm outline-none placeholder:text-paper-muted focus:border-gold/50"
       >
-      <button type="submit" class="h-12 rounded-2xl bg-gold px-5 text-sm font-medium text-white">
+      <button type="submit" class="h-12 rounded-2xl bg-gold px-5 text-sm font-medium text-ink">
         New project
       </button>
     </form>

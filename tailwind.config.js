@@ -35,7 +35,7 @@ export default {
         sans: ['IBM Plex Sans', 'system-ui', 'sans-serif']
       },
       boxShadow: {
-        panel: '0 8px 24px rgb(26 52 105 / 0.06)'
+        panel: '0 10px 28px rgb(0 0 0 / 0.28)'
       }
     }
   }
