@@ -39,6 +39,7 @@ function onSubmit() {
   newsStore.submitSelection(searchStore.mode)
   scriptsStore.clearScripts()
   useVideoStore().clearVideos()
+  useImagesStore().clearImages()
   router.push('/research/lineup')
 }
 </script>

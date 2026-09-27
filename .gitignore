@@ -13,3 +13,5 @@ Thumbs.db
 *.log
 .vscode/*
 !.vscode/extensions.json
+public/generated/images/*
+!public/generated/images/.gitkeep
