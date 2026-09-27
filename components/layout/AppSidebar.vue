@@ -54,6 +54,13 @@ const route = useRoute()
         >
           <span class="text-sm">4. Video</span>
         </NuxtLink>
+        <NuxtLink
+          to="/research/images"
+          class="nav-link"
+          :class="!newsStore.submittedCount ? 'pointer-events-none opacity-40' : ''"
+        >
+          <span class="text-sm">Images</span>
+        </NuxtLink>
       </nav>
     </div>
 
@@ -82,7 +89,7 @@ const route = useRoute()
     </div>
 
     <p class="mt-auto px-2 pt-8 text-[11px] leading-relaxed text-paper-muted">
-      Filter, check, order the lineup, write scripts, then render video.
+      Filter, check, order the lineup, then scripts/video — or jump to AI images for social.
     </p>
   </aside>
 </template>

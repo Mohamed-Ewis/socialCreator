@@ -12,6 +12,14 @@ function goToScripts() {
   router.push('/research/scripts')
 }
 
+function goToImages() {
+  if (!selectedCountForMode.value) {
+    return
+  }
+
+  router.push('/research/images')
+}
+
 const dragState = ref({
   categoryId: null,
   fromIndex: null,
@@ -205,6 +213,14 @@ const panelModeLabel = computed(() => {
         @click="goToScripts"
       >
         Generate scripts
+      </button>
+      <button
+        type="button"
+        class="mt-2 h-10 w-full rounded-xl border border-line bg-ink-raised text-sm font-medium text-paper disabled:opacity-40 hover:border-gold/40"
+        :disabled="!selectedCountForMode"
+        @click="goToImages"
+      >
+        Generate images
       </button>
     </div>
   </aside>

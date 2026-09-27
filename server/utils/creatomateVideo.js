@@ -5,21 +5,30 @@
 
 import { createRequire } from 'node:module'
 
-const require = createRequire(import.meta.url)
-const Creatomate = require('creatomate')
+/**
+ * Lazy-load Creatomate so a missing/broken install cannot abort Nitro module
+ * evaluation before the SSR renderer binding is initialized (TDZ 500).
+ */
+let _api = null
 
-const {
-  Client,
-  Source,
-  Composition,
-  Video,
-  Image,
-  Text,
-  Rectangle,
-  Fade,
-  Font,
-  Shadow
-} = Creatomate
+function api() {
+  if (_api) return _api
+  const require = createRequire(import.meta.url)
+  const Creatomate = require('creatomate')
+  _api = {
+    Client: Creatomate.Client,
+    Source: Creatomate.Source,
+    Composition: Creatomate.Composition,
+    Video: Creatomate.Video,
+    Image: Creatomate.Image,
+    Text: Creatomate.Text,
+    Rectangle: Creatomate.Rectangle,
+    Fade: Creatomate.Fade,
+    Font: Creatomate.Font,
+    Shadow: Creatomate.Shadow
+  }
+  return _api
+}
 
 const CATEGORY_LABELS = {
   'economy-political': { ar: 'السياسة والاقتصاد', en: 'Politics & Economy' },
@@ -77,7 +86,7 @@ function spokenHint(beat, story) {
 }
 
 function textOverlay({ text, language, size = '6.4 vh', yAlignment = '100%' }) {
-  return new Text({
+  return new (api().Text)({
     text,
     width: '100%',
     height: '100%',
@@ -85,8 +94,8 @@ function textOverlay({ text, language, size = '6.4 vh', yAlignment = '100%' }) {
     yPadding: '7 vmin',
     xAlignment: language === 'ar' ? '100%' : '50%',
     yAlignment,
-    font: new Font('Aileron', 800, 'normal', size),
-    shadow: new Shadow('rgba(0,0,0,0.65)', '1.4 vmin'),
+    font: new (api().Font)('Aileron', 800, 'normal', size),
+    shadow: new (api().Shadow)('rgba(0,0,0,0.65)', '1.4 vmin'),
     fillColor: '#ffffff',
     backgroundColor: 'rgba(15, 23, 42, 0.45)',
     backgroundXPadding: '18%',
@@ -97,7 +106,7 @@ function textOverlay({ text, language, size = '6.4 vh', yAlignment = '100%' }) {
 
 function mediaElement({ media, duration }) {
   if (media.kind === 'video' && media.url) {
-    return new Video({
+    return new (api().Video)({
       source: media.url,
       width: '100%',
       height: '100%',
@@ -109,7 +118,7 @@ function mediaElement({ media, duration }) {
   }
 
   if (media.url) {
-    return new Image({
+    return new (api().Image)({
       source: media.url,
       width: '100%',
       height: '100%',
@@ -117,7 +126,7 @@ function mediaElement({ media, duration }) {
     })
   }
 
-  return new Rectangle({
+  return new (api().Rectangle)({
     width: '100%',
     height: '100%',
     fillColor: '#0f172a'
@@ -129,16 +138,16 @@ function buildIntro({ language, categoryId, title, hook }) {
   const mainTitle = asString(title) || tagline
   const hookText = asString(hook) || (language === 'ar' ? 'ملخص سريع.' : 'Quick rundown.')
 
-  return new Composition({
+  return new (api().Composition)({
     track: 1,
     duration: 5,
     elements: [
-      new Rectangle({
+      new (api().Rectangle)({
         width: '100%',
         height: '100%',
         fillColor: '#0b1220'
       }),
-      new Text({
+      new (api().Text)({
         text: tagline,
         width: '100%',
         height: '18%',
@@ -146,10 +155,10 @@ function buildIntro({ language, categoryId, title, hook }) {
         xPadding: '5 vmin',
         xAlignment: language === 'ar' ? '100%' : '50%',
         yAlignment: '50%',
-        font: new Font('Aileron', 600, 'normal', '4.2 vh'),
+        font: new (api().Font)('Aileron', 600, 'normal', '4.2 vh'),
         fillColor: '#93c5fd'
       }),
-      new Text({
+      new (api().Text)({
         text: mainTitle,
         width: '100%',
         height: '28%',
@@ -157,10 +166,10 @@ function buildIntro({ language, categoryId, title, hook }) {
         xPadding: '5 vmin',
         xAlignment: language === 'ar' ? '100%' : '50%',
         yAlignment: '50%',
-        font: new Font('Aileron', 800, 'normal', '7.2 vh'),
+        font: new (api().Font)('Aileron', 800, 'normal', '7.2 vh'),
         fillColor: '#ffffff'
       }),
-      new Text({
+      new (api().Text)({
         text: hookText,
         width: '100%',
         height: '22%',
@@ -168,7 +177,7 @@ function buildIntro({ language, categoryId, title, hook }) {
         xPadding: '5 vmin',
         xAlignment: language === 'ar' ? '100%' : '50%',
         yAlignment: '50%',
-        font: new Font('Aileron', 500, 'normal', '3.8 vh'),
+        font: new (api().Font)('Aileron', 500, 'normal', '3.8 vh'),
         fillColor: '#cbd5e1'
       })
     ]
@@ -189,21 +198,21 @@ function buildStoryScene({ story, beat, language, withFade }) {
   }
 
   if (withFade) {
-    composition.transition = new Fade({ duration: 0.8 })
+    composition.transition = new (api().Fade)({ duration: 0.8 })
   }
 
-  return new Composition(composition)
+  return new (api().Composition)(composition)
 }
 
 function buildOutro({ language, outro }) {
   const text = asString(outro) || (language === 'ar' ? 'اشترك عشان توصلك الباقي.' : 'More after this.')
 
-  return new Composition({
+  return new (api().Composition)({
     track: 1,
     duration: 4,
-    transition: new Fade({ duration: 0.8 }),
+    transition: new (api().Fade)({ duration: 0.8 }),
     elements: [
-      new Rectangle({
+      new (api().Rectangle)({
         width: '100%',
         height: '100%',
         fillColor: '#0b1220'
@@ -249,7 +258,7 @@ export function buildCreatomateSource({ region, category, stories = [], script =
     outro: script?.outro
   }))
 
-  return new Source({
+  return new (api().Source)({
     outputFormat: 'mp4',
     width: 1280,
     height: 720,
@@ -260,7 +269,7 @@ export function buildCreatomateSource({ region, category, stories = [], script =
 }
 
 export function createCreatomateClient(apiKey) {
-  return new Client(apiKey)
+  return new (api().Client)(apiKey)
 }
 
 export async function startCategoryRender({ apiKey, region, category, stories, script }) {
